@@ -1,7 +1,7 @@
 <phyphox version="1.12">
     <title>Acceleration V3 Float</title>
-    <category>Keyfob</category>
-	<color>33dfff</color>
+    <category>phyfob - key experiments</category>
+	<color>ADEBB3</color>
     <description>LSM6DSR Float</description>
 	<translations>	
 	</translations>	
@@ -33,7 +33,7 @@
 
     </data-containers>
     <input>
-        <bluetooth id="Keyfob" name="Keyfob" mode="notification"  mtu="247">
+        <bluetooth id="phyfob" name="phyfob" mode="notification"  mtu="247">
 			<!--en, rate, range acc, range gyr, format, eventsize, average -->
 			<config char="cddf1002-30f7-4671-8b43-5e40ba53514a" conversion="hexadecimal">03050101000F00</config>
 			<!--<config char="cddf1002-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="0">en</config>

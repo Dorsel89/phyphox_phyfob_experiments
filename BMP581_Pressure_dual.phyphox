@@ -1,7 +1,7 @@
 <phyphox version="1.18">
     <title>Height with Pressure-Reference</title>
-    <category>Keyfob</category>
-	<color>33dfff</color>
+    <category>phyfob - key experiments</category>
+	<color>ADEBB3</color>
     <description>BMP581</description>
 	<translations>	
 	</translations>	
@@ -30,14 +30,14 @@
 		
     </data-containers>
     <input>
-        <bluetooth id="Keyfob Measure" name="Keyfob" mode="notification" >
+        <bluetooth id="phyfob Measure" name="phyfob" mode="notification" >
 			<config char="cddf1008-30f7-4671-8b43-5e40ba53514a" conversion="hexadecimal">010400</config>
 			
 			<output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="0" conversion="float32LittleEndian">pressure_raw</output>
 			<output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="4" conversion="float32LittleEndian">temperature</output>
 			<output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="8" conversion="float32LittleEndian">time</output>
         </bluetooth>
-		<bluetooth id="Keyfob Ref" name="Keyfob" mode="notification" >
+		<bluetooth id="phyfob Ref" name="phyfob" mode="notification" >
 			<config char="cddf1008-30f7-4671-8b43-5e40ba53514a" conversion="hexadecimal">010400</config>
 			<output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="0" conversion="float32LittleEndian">pressure_b</output>
 			<output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="4" conversion="float32LittleEndian">temperature_b</output>
@@ -76,10 +76,12 @@
             </value>
             <info label="Note: The reference height 0 is calculated from the average of the first 20 pressure samples">
             </info>
-        </view>	
+        </view>
+		<!--
 		<view label="Share">		
 			<image src="qr-code.png" scale="1.0" lightFilter="none" darkFilter="none" />
-		</view>	
+		</view>
+		-->
     </views>
     <analysis optimization="true">
 

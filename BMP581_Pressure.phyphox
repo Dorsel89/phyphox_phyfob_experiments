@@ -1,36 +1,39 @@
-<phyphox version="1.18">
+<phyphox version="1.19">
     <title>Pressure, Temperature</title>
-    <category>Keyfob</category>
-	<color>33dfff</color>
+    <category>phyfob - key experiments</category>
+	<color>ADEBB3</color>
     <description>BMP581</description>
 	<translations>	
 	</translations>	
     <data-containers>
-        <container size="0">time_raw</container>
-		<container size="0">time</container>
-		
+		<container size="0">time</container>	
 		<container size="0">pressure</container>
 		<container size="0">temperature</container>
 			
-		<container size="1">count_timestamps</container>
-		<container size="1">first</container>
-		<container size="1">rate</container>
-		<container size="1">timeOffset</container>
+		<container size="1" static="false" init="1">cfg_enable</container>
+		<container size="1" static="false" init="4">cfg_oversampling</container>
+		<container size="1" static="false" init="0">cfg_iir</container>
 		
-		<container size="0" static="false">height</container>
-		<container size="20" static="false">first20</container>
-		<container size="1" static="false">averageFirst20</container>
+		<container size="1" static="false" init="1">cfg_enable_out</container>
+		<container size="1" static="false" init="4">cfg_oversampling_out</container>
+		<container size="1" static="false" init="0">cfg_iir_out</container>		
 		
     </data-containers>
     <input>
-        <bluetooth name="Keyfob" mode="notification" >
-			<config char="cddf1008-30f7-4671-8b43-5e40ba53514a" conversion="hexadecimal">010400</config>
+        <bluetooth id="phyfob" name="phyfob" mode="notification" mtu="180">
 			
-			<output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="0" conversion="float32LittleEndian">pressure</output>
-			<output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="4" conversion="float32LittleEndian">temperature</output>
-			<output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="8" conversion="float32LittleEndian">time_raw</output>
+			<output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="0" conversion="float32LittleEndian" repeating="12">pressure</output>
+			<output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="4" conversion="float32LittleEndian" repeating="12">temperature</output>
+			<output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="8" conversion="float32LittleEndian" repeating="12">time</output>
         </bluetooth>
     </input>
+	<output>
+	<bluetooth id="phyfob" name="phyfob">
+		<input keep="false" char="cddf1008-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="0">cfg_enable_out</input>
+		<input keep="false" char="cddf1008-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="1">cfg_oversampling_out</input>
+		<input keep="false" char="cddf1008-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="2">cfg_iir_out</input>
+	</bluetooth>
+	</output>
 	<views>
         <view label="Rawdata">
             <graph label="Pressure" timeOnX="true" labelX="time" unitX="s" labelY="p" unitY="hPa" partialUpdate="true">
@@ -40,13 +43,7 @@
             <value label="Pressure" size="1" precision="3" scientific="false" unit="hPa" factor="1" >
                 <input>pressure</input>
             </value>
-            <graph label="Altitude (from barometer)" aspectRatio="2.5" style="lines" lineWidth="1" color="ff7e22" partialUpdate="false" history="1" labelX="time" labelY="height" labelZ="" unitX="s" unitY="cm" unitZ="" logX="false" logY="false" logZ="false" xPrecision="3" yPrecision="3" zPrecision="3" scaleMinX="auto" scaleMaxX="auto" scaleMinY="auto" scaleMaxY="auto" scaleMinZ="auto" scaleMaxZ="auto" minX="0" maxX="0" minY="0" maxY="0" minZ="0" maxZ="0"  mapWidth="0"       >
-                <input axis="x">time</input>
-                <input axis="y">height</input>
-            </graph>
-            <value label="Altitude" size="1" precision="1" scientific="false" unit="cm" factor="1" >
-                <input>height</input>
-            </value>
+            
             <graph label="Temperature" timeOnX="true" labelX="time" unitX="s" labelY="T" unitY="°C" partialUpdate="true">
                 <input axis="y">temperature</input>
                 <input axis="x">time</input>
@@ -56,53 +53,39 @@
             </value>            			
         </view>		
         <view label="Settings">		
-            <value label="Rate" size="1" precision="0" scientific="false" unit="Hz" factor="1" >
-                    <input>rate</input>
-            </value>
-            <info label="Note: The reference height 0 is calculated from the average of the first 20 pressure samples">
-            </info>
+			<dropdown label="iir coefficient" default="1">
+				<output>cfg_iir</output>
+				<map value="1">1</map>
+				<map value="2">3</map>
+				<map value="3">7</map>
+				<map value="4">15</map>
+				<map value="5">31</map>
+				<map value="6">63</map>
+				<map value="7">127</map>
+			</dropdown>			
+			<dropdown label="Oversampling" default="4">
+				<output>cfg_oversampling</output>
+				<map value="0">1x</map>
+				<map value="1">2x</map>
+				<map value="2">4x</map>
+				<map value="3">8x</map>
+				<map value="4">16x</map>
+				<map value="5">32x</map>
+				<map value="6">64x</map>
+				<map value="7">128x</map>
+			</dropdown>
+			<button label="set configuration">
+				<input>cfg_enable</input>
+				<output>cfg_enable_out</output>
+				<input>cfg_oversampling</input>
+				<output>cfg_oversampling_out</output>
+				<input>cfg_iir</input>
+				<output>cfg_iir_out</output>
+			</button>			
         </view>	
-		<view label="Share">		
-			<image src="qr-code.png" scale="1.0" lightFilter="none" darkFilter="none" />
-		</view>	
     </views>
     <analysis optimization="true">
-		<first>
-            <input as="value" clear="false">time_raw</input>
-            <output as="first">timeOffset</output>
-        </first>
-		<subtract>
-            <input as="minuend" clear="false">time_raw</input>
-            <input as="subtrahend" clear="false">timeOffset</input>
-            <output as="difference" clear="true">time</output>			
-        </subtract>
-		
-		<subrange>
-            <input as="in" clear="false">pressure</input>
-            <input as="from" type="value">0</input>
-            <input as="length" type="value">20</input>
-            <output as="out">first20</output>
-        </subrange>
-        <average>
-            <input as="buffer" clear="false">first20</input>
-            <output as="average">averageFirst20</output>
-        </average>
-        <formula formula="100*44330*(1-([1_]/[2])^(1/5.255))">
-            <input as="in" clear="false">pressure</input>
-            <input as="in" clear="false">averageFirst20</input>
-            <output as="out">height</output>
-        </formula>
-
-        <!-- calculate data rate -->		
-        <count>
-            <input as="buffer" clear="false">time</input>
-            <output as="count">count_timestamps</output>
-        </count>
-        <formula formula="([1]-1)/[2]">
-            <input as="in" clear="false">count_timestamps</input>
-            <input as="in" clear="false">time</input>
-            <output as="out">rate</output>
-        </formula>			
+					
     </analysis>
     <export>
         <set name="Raw Data">

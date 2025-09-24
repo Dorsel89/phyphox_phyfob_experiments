@@ -1,0 +1,92 @@
+<phyphox version="1.18">
+    <title>CO2, Temperature, Humidity - RATE</title>
+    <category>phyfob</category>
+    <color>33dfff</color>
+    <description>STCC4, HDC1080</description>
+
+    <data-containers>
+        <container size="0">hdc_time_raw</container>
+		<container size="0">hdc_time</container>
+		<container size="1">hdc_timeOffset</container>
+		<container size="0">temperature</container>
+		<container size="0">humidity</container>
+		
+		<container size="0">co2_time_raw</container>
+		<container size="0">co2_time</container>
+		<container size="1">co2_timeOffset</container>
+		<container size="0">co2</container>
+
+    </data-containers>
+    <input>
+        <bluetooth id="phyfob" name="phyfob" mode="notification">
+			<config char="cddf1006-30f7-4671-8b43-5e40ba53514a" conversion="hexadecimal">010A</config>
+			<config char="cddf100c-30f7-4671-8b43-5e40ba53514a" conversion="hexadecimal">010A</config>
+            <output char="cddf100b-30f7-4671-8b43-5e40ba53514a" offset="0" conversion="float32LittleEndian">co2</output>
+			<output char="cddf100b-30f7-4671-8b43-5e40ba53514a" offset="4" conversion="float32LittleEndian">co2_time_raw</output>
+            <output char="cddf1005-30f7-4671-8b43-5e40ba53514a" offset="0" conversion="float32LittleEndian">temperature</output>
+			<output char="cddf1005-30f7-4671-8b43-5e40ba53514a" offset="4" conversion="float32LittleEndian">humidity</output>
+            <output char="cddf1005-30f7-4671-8b43-5e40ba53514a" offset="8" conversion="float32LittleEndian">hdc_time_raw</output>
+        </bluetooth>
+    </input>       
+    <output>
+    </output>
+    <views>
+        <view label="Rawdata">
+            <graph label="CO₂" timeOnX="true" labelX="time" unitX="s" labelY="CO₂" unitY="ppm" partialUpdate="true">
+                <input axis="x">co2_time</input>
+                <input axis="y">co2</input>                
+            </graph>
+            <value label="CO₂" unit="ppm" size="1" precision="1" scientific="false" factor="1" >
+                <input>co2</input>
+            </value> 
+			
+            <graph label="Temperature" timeOnX="true" labelX="time" unitX="s" labelY="T" unitY="°C" partialUpdate="true">
+                <input axis="x">hdc_time</input>
+                <input axis="y">temperature</input>                
+            </graph>
+            <value label="Temperature" unit="°C" size="1" precision="1" scientific="false" factor="1" >
+                <input>temperature</input>
+            </value> 
+
+            <graph label="Relative humidity" timeOnX="true" labelX="time" unitX="s" labelY="RH" unitY="%" partialUpdate="true">
+                <input axis="x">hdc_time</input>
+                <input axis="y">humidity</input>                
+            </graph>
+            <value label="RH" unit="%" size="1" precision="1" scientific="false" factor="1" >
+                <input>humidity</input>
+            </value> 
+        </view>
+       
+    </views>
+    <analysis sleep="0" onUserInput="false">
+		<first>
+            <input as="value" clear="false">hdc_time_raw</input>
+            <output as="first">hdc_timeOffset</output>
+        </first>
+		<first>
+            <input as="value" clear="false">co2_time_raw</input>
+            <output as="first">co2_timeOffset</output>
+        </first>		
+		
+		<subtract>
+            <input as="minuend" clear="false">hdc_time_raw</input>
+            <input as="subtrahend" clear="false">hdc_timeOffset</input>
+            <output as="difference">hdc_time</output>			
+        </subtract>
+		<subtract>
+            <input as="minuend" clear="false">co2_time_raw</input>
+            <input as="subtrahend" clear="false">co2_timeOffset</input>
+            <output as="difference">co2_time</output>			
+        </subtract>
+
+    </analysis>
+    <export>
+        <set name="Raw data">
+            <data name="Time T,RH (s)">hdc_time</data>
+            <data name="Temperature (°C)">temperature</data>
+			<data name="rel Humidity (%)">humidity</data>
+			<data name="Time CO2 (s)">co2_time</data>
+			<data name="CO2 (ppm)">humidity</data>
+        </set>
+    </export>
+</phyphox>
