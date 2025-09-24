@@ -1,7 +1,7 @@
 <phyphox version="1.18">
     <title>CO2, Temperature, Humidity - RATE</title>
-    <category>phyfob</category>
-    <color>33dfff</color>
+    <category>phyfob - key experiments</category>
+    <color>ADEBB3</color>
     <description>STCC4, HDC1080</description>
 
     <data-containers>
