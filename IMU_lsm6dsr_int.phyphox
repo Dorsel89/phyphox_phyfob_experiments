@@ -1,5 +1,5 @@
 <phyphox version="1.12">
-    <title>Acceleration V3</title>
+    <title>Acceleration</title>
     <category>phyfob - key experiments</category>
 	<color>ADEBB3</color>
     <description>LSM6DSR 6667Hz</description>
@@ -7,14 +7,7 @@
 	</translations>	
     <data-containers>
 		<container size="0">acc_time</container>
-		
-
-		<container size="1">acc_x_SI_count</container>
-		<container size="0">debug_t2</container>
-
-		<container size="1">debug1</container>
-		<container size="1">debug2</container>
-		
+				
 		<container size="0">acc_time_ramp</container>		
 		<container size="0">acc_timestamps</container>
 		<container size="1">acc_timestamps_count</container>
@@ -110,12 +103,9 @@
 		<value label="Accelerometer Z" size="1" precision="2" scientific="false"  factor="1" unit="m/s²" hideTimeMarkers="true">
                 <input>acc_z_SI</input>
 		</value>
-		<value label="COUNT VALUES" size="1" precision="2" scientific="false"  factor="1" unit="">
-                <input>acc_x_SI_count</input>
-		</value>			
 		</view>
     </views>
-    <analysis optimization="true" requireFill="acc_timestamps" requireFillThreshold="4" timedRun="true" timedRunStartDelay="0" timedRunStopDelay="10">
+    <analysis optimization="true" requireFill="acc_timestamps" requireFillThreshold="4" timedRun="false" timedRunStartDelay="0" timedRunStopDelay="10">
 		<!-- generate time stamps part 1-->
 		<split>
 			<input as="data" clear="false">acc_timestamps</input>
@@ -124,7 +114,7 @@
 			<output as="out1" clear="true">acc_timestamps_subrange</output>
 		</split>
 	  
-		<formula formula="[1]+([2]-1)/(7283*1)">
+		<formula formula="[1]+([2]-1)/(6667*1)">
 			<input as="in" clear="false">acc_timestamps_subrange</input>
 			<input as="in" clear="false">config_n_times</input>
 			<output as="out" clear="true">acc_package_endtime</output>
@@ -144,7 +134,7 @@
 			<output as="out1" clear="true">acc_timestamps_subrange</output>
 		</split>
 	  
-		<formula formula="[1]+([2]-1)/(7283*1)">
+		<formula formula="[1]+([2]-1)/(6667*1)">
 			<input as="in" clear="false">acc_timestamps_subrange</input>
 			<input as="in" clear="false">config_n_times</input>
 			<output as="out" clear="true">acc_package_endtime</output>
@@ -165,7 +155,7 @@
 			<output as="out1" clear="true">acc_timestamps_subrange</output>
 		</split>
 	  
-		<formula formula="[1]+([2]-1)/(7283*1)">
+		<formula formula="[1]+([2]-1)/(6667*1)">
 			<input as="in" clear="false">acc_timestamps_subrange</input>
 			<input as="in" clear="false">config_n_times</input>
 			<output as="out" clear="true">acc_package_endtime</output>
@@ -185,7 +175,7 @@
 			<output as="out1" clear="true">acc_timestamps_subrange</output>
 		</split>
 	  
-		<formula formula="[1]+([2]-1)/(7283*1)">
+		<formula formula="[1]+([2]-1)/(6667*1)">
 			<input as="in" clear="false">acc_timestamps_subrange</input>
 			<input as="in" clear="false">config_n_times</input>
 			<output as="out" clear="true">acc_package_endtime</output>
@@ -219,10 +209,7 @@
 			<!-- <input as="in" clear="false">selected_acc_range</input> -->
 			<output as="out" clear="false">acc_z_SI</output>
 		</formula>		
-		<count>
-			<input clear="false">acc_x_SI</input>    		
-			<output>acc_x_SI_count</output>
-		</count>
+
     </analysis>
     <export>
         <set name="Raw Data">

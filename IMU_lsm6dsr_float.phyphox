@@ -1,12 +1,11 @@
 <phyphox version="1.12">
-    <title>Acceleration V3 Float</title>
+    <title>Acceleration,rotation rate</title>
     <category>phyfob - key experiments</category>
 	<color>ADEBB3</color>
     <description>LSM6DSR Float</description>
 	<translations>	
 	</translations>	
-    <data-containers>
-		
+	<data-containers>
 		<container size="1">acc_x_SI_count</container>
 		
 		
