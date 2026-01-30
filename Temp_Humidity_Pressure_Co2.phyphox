@@ -1,0 +1,111 @@
+<phyphox version="1.18">
+    <title>CO2, Temperature, Humidity</title>
+    <category>phyfob - key experiments</category>
+    <color>ADEBB3</color>
+    <description>STCC4, HDC1080</description>
+
+    <data-containers>
+        <container size="0">hdc_time_raw</container>
+		<container size="0">hdc_time</container>
+		<container size="1">timeOffset</container>
+		<container size="0">temperature</container>
+		<container size="0">humidity</container>
+		
+		<container size="0">co2_time_raw</container>
+		<container size="0">co2_time</container>
+		<container size="0">co2</container>
+
+		<container size="0">bmp_time_raw</container>
+		<container size="0">bmp_time</container>
+		<container size="0">pressure</container>
+
+    </data-containers>
+    <input>
+        <bluetooth id="phyfob" name="phyfob" mode="notification">
+			<config char="cddf1006-30f7-4671-8b43-5e40ba53514a" conversion="hexadecimal">010A</config>
+			<config char="cddf100c-30f7-4671-8b43-5e40ba53514a" conversion="hexadecimal">010A</config>
+            <output char="cddf100b-30f7-4671-8b43-5e40ba53514a" offset="0" conversion="float32LittleEndian">co2</output>
+			<output char="cddf100b-30f7-4671-8b43-5e40ba53514a" offset="4" conversion="float32LittleEndian">co2_time_raw</output>
+            <output char="cddf1005-30f7-4671-8b43-5e40ba53514a" offset="0" conversion="float32LittleEndian">temperature</output>
+			<output char="cddf1005-30f7-4671-8b43-5e40ba53514a" offset="4" conversion="float32LittleEndian">humidity</output>
+            <output char="cddf1005-30f7-4671-8b43-5e40ba53514a" offset="8" conversion="float32LittleEndian">hdc_time_raw</output>
+			
+			<config char="cddf1008-30f7-4671-8b43-5e40ba53514a" conversion="hexadecimal">010600</config>
+			<output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="0" conversion="float32LittleEndian">pressure</output>
+			<output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="8" conversion="float32LittleEndian">bmp_time_raw</output>
+        </bluetooth>
+    </input>       
+    <output>
+    </output>
+    <views>
+        <view label="Rawdata">
+            <graph label="CO₂" timeOnX="true" labelX="time" unitX="s" labelY="CO₂" unitY="ppm" partialUpdate="true">
+                <input axis="x">co2_time</input>
+                <input axis="y">co2</input>                
+            </graph>
+            <value label="CO₂" unit="ppm" size="1" precision="1" scientific="false" factor="1" >
+                <input>co2</input>
+            </value> 
+			
+            <graph label="Temperature" timeOnX="true" labelX="time" unitX="s" labelY="T" unitY="°C" partialUpdate="true">
+                <input axis="x">hdc_time</input>
+                <input axis="y">temperature</input>                
+            </graph>
+            <value label="Temperature" unit="°C" size="1" precision="1" scientific="false" factor="1" >
+                <input>temperature</input>
+            </value> 
+
+            <graph label="Relative humidity" timeOnX="true" labelX="time" unitX="s" labelY="RH" unitY="%" partialUpdate="true">
+                <input axis="x">hdc_time</input>
+                <input axis="y">humidity</input>                
+            </graph>
+            <value label="RH" unit="%" size="1" precision="1" scientific="false" factor="1" >
+                <input>humidity</input>
+            </value>
+            <graph label="Pressure" timeOnX="true" labelX="time" unitX="s" labelY="P" unitY="hPa" partialUpdate="true">
+                <input axis="x">bmp_time</input>
+                <input axis="y">pressure</input>                
+            </graph>
+            <value label="P" unit="hPa" size="1" precision="1" scientific="false" factor="1" >
+                <input>pressure</input>
+            </value> 			
+        </view>
+       
+    </views>
+    <analysis sleep="0" onUserInput="false">
+		<first>
+            <input as="value" clear="false">bmp_time_raw</input>
+            <output as="first">timeOffset</output>
+        </first>
+		
+		
+		<subtract>
+            <input as="minuend" clear="false">hdc_time_raw</input>
+            <input as="subtrahend" clear="false">timeOffset</input>
+            <output as="difference">hdc_time</output>			
+        </subtract>
+		<subtract>
+            <input as="minuend" clear="false">co2_time_raw</input>
+            <input as="subtrahend" clear="false">timeOffset</input>
+            <output as="difference">co2_time</output>			
+        </subtract>
+		<subtract>
+            <input as="minuend" clear="false">bmp_time_raw</input>
+            <input as="subtrahend" clear="false">timeOffset</input>
+            <output as="difference">bmp_time</output>			
+        </subtract>
+		
+
+    </analysis>
+    <export>
+        <set name="Raw data">
+            <data name="Timestamps T,RH (s)">hdc_time</data>
+            <data name="Temperature (°C)">temperature</data>
+			<data name="rel Humidity (%)">humidity</data>
+			<data name="Timestamps CO2 (s)">co2_time</data>
+			<data name="CO2 (ppm)">humidity</data>
+			<data name="Timestamps Pressure(hPa)">bmp_time</data>
+			<data name="P (hPa)">pressure</data>
+        </set>
+    </export>
+</phyphox>

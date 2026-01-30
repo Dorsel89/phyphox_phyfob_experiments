@@ -6,9 +6,15 @@
 	<translations>	
 	</translations>	
     <data-containers>
+		<container size="0">time_raw</container>	
 		<container size="0">time</container>	
 		<container size="0">pressure</container>
+		<container size="0">height</container>
+		<container size="0">pressure_raw</container>
 		<container size="0">temperature</container>
+		
+		<container size="0">first10</container>
+		<container size="1">averageFirst10</container>
 			
 		<container size="1" static="false" init="1">cfg_enable</container>
 		<container size="1" static="false" init="4">cfg_oversampling</container>
@@ -22,9 +28,9 @@
     <input>
         <bluetooth id="phyfob" name="phyfob" mode="notification" mtu="180">
 			
-			<output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="0" conversion="float32LittleEndian" repeating="12">pressure</output>
+			<output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="0" conversion="float32LittleEndian" repeating="12">pressure_raw</output>
 			<output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="4" conversion="float32LittleEndian" repeating="12">temperature</output>
-			<output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="8" conversion="float32LittleEndian" repeating="12">time</output>
+			<output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="8" conversion="float32LittleEndian" repeating="12">time_raw</output>
         </bluetooth>
     </input>
 	<output>
@@ -50,7 +56,14 @@
             </graph>
             <value label="Temperature" size="1" precision="1" scientific="false" unit="°C" factor="1" >
                 <input>temperature</input>
-            </value>            			
+            </value>
+            <graph label="Altitude (from barometer)" timeOnX="true" labelX="time" labelY="height" unitX="s" unitY="cm" partialUpdate="true">
+                <input axis="x">time</input>
+                <input axis="y">height</input>
+            </graph>
+            <value label="Altitude" size="1" precision="1" scientific="false" unit="cm" factor="1" >
+                <input>height</input>
+            </value>		
         </view>		
         <view label="Settings">		
 			<dropdown label="iir coefficient" default="1">
@@ -84,8 +97,32 @@
 			</button>			
         </view>	
     </views>
-    <analysis optimization="true">
-					
+    <analysis requireFill="pressure_raw" requireFillThreshold="10">
+		<subrange cycles="1-2">
+            <input as="in" clear="false">pressure_raw</input>
+            <input as="from" type="value">0</input>
+            <input as="length" type="value">10</input>
+            <output as="out">first10</output>
+        </subrange>
+        <average cycles="1-2">
+            <input as="buffer" clear="false">first10</input>
+            <output as="average" keep="false" >averageFirst10</output>
+        </average>
+		
+        <formula cycles="3-" formula="100*44330*(1-([1_]/[2])^(1/5.255))">
+            <input as="in" clear="false">pressure_raw</input>
+            <input as="in" clear="false">averageFirst10</input>
+            <output clear="false" as="out">height</output>
+        </formula>					
+		<append cycles="3-">
+            <input as="in" clear="true">pressure_raw</input>
+            <output as="out" clear="false" >pressure</output>
+        </append>
+		<append cycles="3-">
+            <input as="in" clear="true">time_raw</input>
+            <output as="out" clear="false" >time</output>
+        </append>		
+		
     </analysis>
     <export>
         <set name="Raw Data">
