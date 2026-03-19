@@ -23,7 +23,7 @@
 
     </data-containers>
     <input>
-        <bluetooth id="phyfob" name="phyfob" mode="notification">
+        <bluetooth id="phyfob" name="phyfob" mode="notification" subscribeOnStart="true">
             <config char="cddf1006-30f7-4671-8b43-5e40ba53514a" conversion="hexadecimal">010A</config>
             <output char="cddf1005-30f7-4671-8b43-5e40ba53514a" offset="0" conversion="float32LittleEndian">temperature</output>
             <output char="cddf1005-30f7-4671-8b43-5e40ba53514a" offset="4" conversion="float32LittleEndian">humidity</output>

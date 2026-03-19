@@ -38,7 +38,7 @@
 		
     </data-containers>
     <input>
-        <bluetooth id="phyfob" name="phyfob" mode="notification" mtu="180">
+        <bluetooth id="phyfob" name="phyfob" mode="notification" mtu="180" subscribeOnStart="true">
 			
 			<output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="0" conversion="float32LittleEndian" repeating="12">pressure_raw</output>
 			<output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="4" conversion="float32LittleEndian" repeating="12">temperature_raw</output>
