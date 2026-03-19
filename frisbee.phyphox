@@ -59,10 +59,10 @@
 	<views>
         <view label="Rawdata">
             <graph label="Pressure" timeOnX="true" labelX="time" unitX="s" labelY="p" unitY="hPa" partialUpdate="true">
-                <input axis="y">pressure</input>
                 <input axis="x">time</input>
-				<input axis="y" color="blue">pressure_2</input>
+                <input axis="y">pressure</input>
                 <input axis="x">time_2</input>
+                <input axis="y" color="blue">pressure_2</input>
             </graph>
             <value label="Pressure" size="1" precision="3" scientific="false" unit="hPa" factor="1" >
                 <input>pressure</input>
@@ -71,9 +71,8 @@
                 <input>pressure_2</input>
             </value>
             <graph label="Pressure diff" timeOnX="true" labelX="time" unitX="s" labelY="p" unitY="hPa" partialUpdate="true">
-                <input axis="y">pressure_diff</input>
                 <input axis="x">time</input>
-
+                <input axis="y">pressure_diff</input>
             </graph>			
                        			
         </view>				
