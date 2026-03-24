@@ -30,7 +30,7 @@
 			
 		<container size="1" static="false" init="1">cfg_enable</container>
 		<container size="1" static="false" init="4">cfg_oversampling</container>
-		<container size="1" static="false" init="0">cfg_iir</container>
+		<container size="1" static="false" init="1">cfg_iir</container>
 		
 		<container size="1" static="false" init="1">cfg_enable_out</container>
 		<container size="1" static="false" init="4">cfg_oversampling_out</container>
