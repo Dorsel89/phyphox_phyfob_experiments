@@ -73,8 +73,7 @@
             <graph label="Pressure diff" timeOnX="true" labelX="time" unitX="s" labelY="p" unitY="hPa" partialUpdate="true">
                 <input axis="x">time</input>
                 <input axis="y">pressure_diff</input>
-            </graph>			
-                       			
+            </graph>		
         </view>				
 		<view label="Share">		
 			<image src="qr-code.png" scale="1.0" lightFilter="none" darkFilter="none" />

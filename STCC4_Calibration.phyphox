@@ -1,0 +1,54 @@
+<phyphox version="1.18">
+    <title>CO2 Calibration</title>
+    <category>phyfob - key experiments</category>
+    <color>ADEBB3</color>
+    <description>STCC4</description>
+
+    <data-containers>	
+		<container size="0">co2_time_raw</container>
+		<container size="0">co2_time</container>
+		<container size="1">co2_timeOffset</container>
+		<container size="0">co2</container>
+
+    </data-containers>
+    <input>
+        <bluetooth id="phyfob" name="phyfob" mode="notification" subscribeOnStart="true">
+			<config char="cddf100c-30f7-4671-8b43-5e40ba53514a" conversion="hexadecimal">0228</config>
+            <output char="cddf100b-30f7-4671-8b43-5e40ba53514a" offset="0" conversion="float32LittleEndian">co2</output>
+			<output char="cddf100b-30f7-4671-8b43-5e40ba53514a" offset="4" conversion="float32LittleEndian">co2_time_raw</output>
+        </bluetooth>
+    </input>       
+    <output>
+    </output>
+    <views>
+        <view label="Rawdata">
+            <graph label="CO₂" timeOnX="true" labelX="time" unitX="s" labelY="CO₂" unitY="ppm" partialUpdate="true">
+                <input axis="x">co2_time</input>
+                <input axis="y">co2</input>                
+            </graph>
+            <value label="CO₂" unit="ppm" size="1" precision="1" scientific="false" factor="1" >
+                <input>co2</input>
+            </value> 
+        </view>
+       
+    </views>
+    <analysis sleep="0" onUserInput="false">
+
+		<first>
+            <input as="value" clear="false">co2_time_raw</input>
+            <output as="first">co2_timeOffset</output>
+        </first>		
+		<subtract>
+            <input as="minuend" clear="false">co2_time_raw</input>
+            <input as="subtrahend" clear="false">co2_timeOffset</input>
+            <output as="difference">co2_time</output>			
+        </subtract>
+
+    </analysis>
+    <export>
+        <set name="Raw data">
+			<data name="Time CO2 (s)">co2_time</data>
+			<data name="CO2 (ppm)">co2</data>
+        </set>
+    </export>
+</phyphox>
