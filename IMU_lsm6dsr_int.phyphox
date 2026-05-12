@@ -59,9 +59,9 @@
 
     </output>	
 	<views>
-		<info label="Experimental: The 6400 Hz sampling rate may not transmit reliably – you might notice gaps or missing data due to connection issues. phyphox will switch to optimal connection parameters, which may take a few seconds."/>
-		<view label="Accelerometer">  
 		
+		<view label="Accelerometer">  
+		<info label="Experimental: The 6400 Hz sampling rate may not transmit reliably – you might notice gaps or missing data due to connection issues. phyphox will switch to optimal connection parameters, which may take a few seconds."/>
 		<graph label="Accelerometer X" timeOnX="true" labelX="time" unitX="s" labelY="a" unitY="m/s²" partialUpdate="true" hideTimeMarkers="true">
 			<input axis="x">acc_time</input>
 			<input axis="y">acc_x_SI</input>
