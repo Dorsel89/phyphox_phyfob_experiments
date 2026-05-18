@@ -118,9 +118,6 @@
 			</graph>
 			<value label="Accelerometer Z" size="1" precision="2" scientific="false"  factor="1" unit="m/s²" hideTimeMarkers="true">
 					<input>acc_z</input>
-			</value>
-			<value label="COUNT VALUES" size="1" precision="2" scientific="false"  factor="1" unit="">
-					<input>acc_x_SI_count</input>
 			</value>			
 		</view>
     </views>
