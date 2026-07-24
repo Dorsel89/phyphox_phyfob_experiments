@@ -5,7 +5,7 @@
     <description>Reads out the CO₂/temperature/humidity/pressure data that phyphox:mini logged in the background.</description>
     <translations>
         <translation locale="de">
-            <title>phyphox:mini Datalog-Auslesen</title>
+            <title>Datalog-Auslesen</title>
             <category>phyphox:mini</category>
             <description>Liest die im Hintergrund von phyphox:mini aufgezeichneten CO₂-/Temperatur-/Feuchtigkeits-/Druckdaten aus.</description>
             <string original="Logged data">Aufgezeichnete Daten</string>
