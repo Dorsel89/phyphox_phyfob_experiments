@@ -1,5 +1,5 @@
 <phyphox version="1.18">
-    <title>phyphox:mini Datalog Readout</title>
+    <title>Datalog Readout</title>
     <category>phyphox:mini</category>
     <color>ADEBB3</color>
     <description>Reads out the CO₂/temperature/humidity/pressure data that phyphox:mini logged in the background.</description>
@@ -9,7 +9,7 @@
             <category>phyphox:mini</category>
             <description>Liest die im Hintergrund von phyphox:mini aufgezeichneten CO₂-/Temperatur-/Feuchtigkeits-/Druckdaten aus.</description>
             <string original="Logged data">Aufgezeichnete Daten</string>
-            <string original="Press a button below to fetch the data phyphox:mini logged in the background. This can take a few seconds for large datasets.">Tippe auf eine der Schaltflächen unten, um die im Hintergrund von phyphox:mini aufgezeichneten Daten abzurufen. Dies kann bei großen Datensätzen einige Sekunden dauern.</string>
+            <string original="Press a button below to fetch the data phyphox:mini logged in the background. This can take a few seconds for large datasets.">Tippe auf einen Button, um die im Hintergrund von phyphox:mini aufgezeichneten Daten abzurufen. Dies kann bei großen Datensätzen einige Sekunden dauern.</string>
             <string original="Request all data">Alle Daten anfordern</string>
             <string original="Request last 24h">Letzte 24 h anfordern</string>
             <string original="Request last hour">Letzte Stunde anfordern</string>

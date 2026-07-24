@@ -1,5 +1,5 @@
 <phyphox version="1.19">
-    <title>phyphox:mini Datalog Config</title>
+    <title>Datalog Config</title>
     <category>phyphox:mini</category>
     <color>ADEBB3</color>
     <description>Configures phyphox:mini's background data logging: choose which quantities (CO₂, temperature, humidity, pressure) are recorded and at which interval, then start/stop logging or erase the stored log. Logging runs in the background on phyphox:mini's external flash whenever no phone is connected. Use the "phyphox:mini Datalog Readout" experiment to fetch the recorded data afterwards.</description>
