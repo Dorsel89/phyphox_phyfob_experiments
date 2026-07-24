@@ -96,7 +96,7 @@
         </view>
     </views>
 
-    <analysis sleep="0" onUserInput="true">
+    <analysis>
         <formula formula="[1]*1+[2]*2+[3]*4+[4]*8">
             <input clear="false">sel_co2</input>
             <input clear="false">sel_temperature</input>

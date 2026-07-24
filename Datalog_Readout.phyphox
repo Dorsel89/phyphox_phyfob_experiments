@@ -59,6 +59,16 @@
             <info label="Press a button below to fetch the data phyphox:mini logged in the background. This can take a few seconds for large datasets.">
             </info>
             <button label="Request all data">
+                <input type="empty" />
+                <output>time</output>
+                <input type="empty" />
+                <output>co2</output>
+                <input type="empty" />
+                <output>temperature</output>
+                <input type="empty" />
+                <output>humidity</output>
+                <input type="empty" />
+                <output>pressure</output>            
                 <input type="value">0</input>
                 <output>max_age_lo_out</output>
                 <input type="value">0</input>
@@ -67,6 +77,16 @@
                 <output>cmd_dump_out</output>
             </button>
             <button label="Request last 24h">
+                <input type="empty" />
+                <output>time</output>
+                <input type="empty" />
+                <output>co2</output>
+                <input type="empty" />
+                <output>temperature</output>
+                <input type="empty" />
+                <output>humidity</output>
+                <input type="empty" />
+                <output>pressure</output>            
                 <input type="value">160</input>
                 <output>max_age_lo_out</output>
                 <input type="value">5</input>
@@ -75,6 +95,16 @@
                 <output>cmd_dump_out</output>
             </button>
             <button label="Request last hour">
+                <input type="empty" />
+                <output>time</output>
+                <input type="empty" />
+                <output>co2</output>
+                <input type="empty" />
+                <output>temperature</output>
+                <input type="empty" />
+                <output>humidity</output>
+                <input type="empty" />
+                <output>pressure</output>            
                 <input type="value">60</input>
                 <output>max_age_lo_out</output>
                 <input type="value">0</input>
@@ -102,7 +132,7 @@
         </view>
     </views>
 
-    <analysis sleep="0" onUserInput="true">
+    <analysis>
         <formula formula="[1]%256">
             <input clear="false">max_age_minutes</input>
             <output clear="false">max_age_lo</output>
