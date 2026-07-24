@@ -1,8 +1,21 @@
 <phyphox version="1.18">
-    <title>CO2, Temperature, Humidity, Pressure</title>
-    <category>phyfob - key experiments</category>
+    <title>CO₂, Temperature, Humidity, Pressure</title>
+    <category>phyphox:mini</category>
     <color>ADEBB3</color>
     <description>STCC4, HDC1080, BMP581</description>
+    <translations>
+        <translation locale="de">
+            <title>CO₂, Temperatur, Feuchtigkeit, Druck</title>
+            <category>phyphox:mini</category>
+            <string original="Rawdata">Rohdaten</string>
+            <string original="CO₂">CO₂</string>
+            <string original="Temperature">Temperatur</string>
+            <string original="Relative humidity">Relative Luftfeuchtigkeit</string>
+            <string original="RH">rF</string>
+            <string original="Pressure">Druck</string>
+            <string original="P">P</string>
+        </translation>
+    </translations>
 
     <data-containers>
         <container size="0">hdc_time_raw</container>
@@ -21,7 +34,7 @@
 
     </data-containers>
     <input>
-        <bluetooth id="phyfob" name="phyfob" mode="notification" subscribeOnStart="true">
+        <bluetooth id="phyphox:mini" name="phyphox:mini" mode="notification" subscribeOnStart="true">
 			<config char="cddf1006-30f7-4671-8b43-5e40ba53514a" conversion="hexadecimal">010A</config>
 			<config char="cddf100c-30f7-4671-8b43-5e40ba53514a" conversion="hexadecimal">010A</config>
             <output char="cddf100b-30f7-4671-8b43-5e40ba53514a" offset="0" conversion="float32LittleEndian">co2</output>
@@ -102,8 +115,8 @@
             <data name="Timestamps T,RH (s)">hdc_time</data>
             <data name="Temperature (°C)">temperature</data>
 			<data name="rel Humidity (%)">humidity</data>
-			<data name="Timestamps CO2 (s)">co2_time</data>
-			<data name="CO2 (ppm)">humidity</data>
+			<data name="Timestamps CO₂ (s)">co2_time</data>
+			<data name="CO₂ (ppm)">humidity</data>
 			<data name="Timestamps Pressure(hPa)">bmp_time</data>
 			<data name="P (hPa)">pressure</data>
         </set>

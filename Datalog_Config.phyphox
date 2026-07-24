@@ -1,0 +1,120 @@
+<phyphox version="1.19">
+    <title>phyphox:mini Datalog Config</title>
+    <category>phyphox:mini</category>
+    <color>ADEBB3</color>
+    <description>Configures phyphox:mini's background data logging: choose which quantities (CO₂, temperature, humidity, pressure) are recorded and at which interval, then start/stop logging or erase the stored log. Logging runs in the background on phyphox:mini's external flash whenever no phone is connected. Use the "phyphox:mini Datalog Readout" experiment to fetch the recorded data afterwards.</description>
+    <translations>
+        <translation locale="de">
+            <title>phyphox:mini Datalog-Konfiguration</title>
+            <category>phyphox:mini</category>
+            <description>Konfiguriert die Hintergrundaufzeichnung von phyphox:mini: Wähle aus, welche Größen (CO₂, Temperatur, Feuchtigkeit, Druck) aufgezeichnet werden und in welchem Intervall, und starte/stoppe die Aufzeichnung oder lösche das gespeicherte Protokoll. Die Aufzeichnung läuft im Hintergrund auf dem externen Flash-Speicher von phyphox:mini, solange kein Smartphone verbunden ist. Nutze das Experiment "phyphox:mini Datalog-Auslesen", um die aufgezeichneten Daten anschließend abzurufen.</description>
+            <string original="Settings">Einstellungen</string>
+            <string original="CO₂">CO₂</string>
+            <string original="Temperature">Temperatur</string>
+            <string original="Humidity">Feuchtigkeit</string>
+            <string original="Pressure">Druck</string>
+            <string original="Logging interval">Aufzeichnungsintervall</string>
+            <string original="Start logging">Aufzeichnung starten</string>
+            <string original="Stop logging">Aufzeichnung stoppen</string>
+            <string original="Erase log">Aufzeichnung löschen</string>
+            <string original="Choose which quantities to log in the background and at which interval. Note: changing the selection of quantities compared to the last logging run erases the previously logged data (phyphox:mini needs a fixed record layout).">Wähle aus, welche Größen im Hintergrund aufgezeichnet werden sollen und in welchem Intervall. Hinweis: Wird die Auswahl der Größen gegenüber der letzten Aufzeichnung geändert, werden die zuvor aufgezeichneten Daten gelöscht (phyphox:mini benötigt ein festes Datenformat).</string>
+            <string original="Warning: pressing &quot;Erase log&quot; or starting logging with a different quantity selection than before permanently deletes the previously logged data.">Warnung: Ein Tippen auf "Aufzeichnung löschen" oder das Starten einer Aufzeichnung mit einer anderen Auswahl an Größen als zuvor löscht die bisher aufgezeichneten Daten endgültig.</string>
+        </translation>
+    </translations>
+
+    <data-containers>
+        <container size="1" static="false" init="1">sel_co2</container>
+        <container size="1" static="false" init="1">sel_temperature</container>
+        <container size="1" static="false" init="1">sel_humidity</container>
+        <container size="1" static="false" init="1">sel_pressure</container>
+        <container size="1" static="false" init="15">mask</container>
+
+        <container size="1" static="false" init="60">interval_s</container>
+        <container size="1" static="false" init="60">interval_lo</container>
+        <container size="1" static="false" init="0">interval_hi</container>
+
+        <container size="1" static="false" init="0">cmd_out</container>
+        <container size="1" static="false" init="0">mask_out</container>
+        <container size="1" static="false" init="0">interval_lo_out</container>
+        <container size="1" static="false" init="0">interval_hi_out</container>
+    </data-containers>
+
+    <input>
+    </input>
+    <output>
+        <bluetooth id="phyphox:mini" name="phyphox:mini">
+            <input keep="false" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="0">cmd_out</input>
+            <input keep="false" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="1">mask_out</input>
+            <input keep="false" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="2">interval_lo_out</input>
+            <input keep="false" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="3">interval_hi_out</input>
+        </bluetooth>
+    </output>
+
+    <views>
+        <view label="Settings">
+            <info label="Choose which quantities to log in the background and at which interval. Note: changing the selection of quantities compared to the last logging run erases the previously logged data (phyphox:mini needs a fixed record layout).">
+            </info>
+
+            <toggle label="CO₂" default="1">
+                <output>sel_co2</output>
+            </toggle>
+            <toggle label="Temperature" default="1">
+                <output>sel_temperature</output>
+            </toggle>
+            <toggle label="Humidity" default="1">
+                <output>sel_humidity</output>
+            </toggle>
+            <toggle label="Pressure" default="1">
+                <output>sel_pressure</output>
+            </toggle>
+
+            <edit label="Logging interval" signed="false" decimal="false" min="1" max="65535" unit="s" factor="1" default="60">
+                <output>interval_s</output>
+            </edit>
+
+            <button label="Start logging">
+                <input>mask</input>
+                <output>mask_out</output>
+                <input>interval_lo</input>
+                <output>interval_lo_out</output>
+                <input>interval_hi</input>
+                <output>interval_hi_out</output>
+                <input type="value">1</input>
+                <output>cmd_out</output>
+            </button>
+
+            <info label="Warning: pressing &quot;Erase log&quot; or starting logging with a different quantity selection than before permanently deletes the previously logged data.">
+            </info>
+            <button label="Stop logging">
+                <input type="value">0</input>
+                <output>cmd_out</output>
+            </button>
+            <button label="Erase log">
+                <input type="value">3</input>
+                <output>cmd_out</output>
+            </button>
+        </view>
+    </views>
+
+    <analysis sleep="0" onUserInput="true">
+        <formula formula="[1]*1+[2]*2+[3]*4+[4]*8">
+            <input clear="false">sel_co2</input>
+            <input clear="false">sel_temperature</input>
+            <input clear="false">sel_humidity</input>
+            <input clear="false">sel_pressure</input>
+            <output clear="false">mask</output>
+        </formula>
+        <formula formula="[1]%256">
+            <input clear="false">interval_s</input>
+            <output clear="false">interval_lo</output>
+        </formula>
+        <formula formula="([1]-[2])/256">
+            <input clear="false">interval_s</input>
+            <input clear="false">interval_lo</input>
+            <output clear="false">interval_hi</output>
+        </formula>
+    </analysis>
+
+    <export>
+    </export>
+</phyphox>

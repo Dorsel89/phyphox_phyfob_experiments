@@ -1,0 +1,126 @@
+<phyphox version="1.18">
+    <title>phyphox:mini Datalog Readout</title>
+    <category>phyphox:mini</category>
+    <color>ADEBB3</color>
+    <description>Reads out the CO₂/temperature/humidity/pressure data that phyphox:mini logged in the background.</description>
+    <translations>
+        <translation locale="de">
+            <title>phyphox:mini Datalog-Auslesen</title>
+            <category>phyphox:mini</category>
+            <description>Liest die im Hintergrund von phyphox:mini aufgezeichneten CO₂-/Temperatur-/Feuchtigkeits-/Druckdaten aus.</description>
+            <string original="Logged data">Aufgezeichnete Daten</string>
+            <string original="Press a button below to fetch the data phyphox:mini logged in the background. This can take a few seconds for large datasets.">Tippe auf eine der Schaltflächen unten, um die im Hintergrund von phyphox:mini aufgezeichneten Daten abzurufen. Dies kann bei großen Datensätzen einige Sekunden dauern.</string>
+            <string original="Request all data">Alle Daten anfordern</string>
+            <string original="Request last 24h">Letzte 24 h anfordern</string>
+            <string original="Request last hour">Letzte Stunde anfordern</string>
+            <string original="CO₂">CO₂</string>
+            <string original="Temperature">Temperatur</string>
+            <string original="Relative humidity">Relative Luftfeuchtigkeit</string>
+            <string original="Pressure">Druck</string>
+        </translation>
+    </translations>
+
+    <data-containers>
+        <container size="1" static="false" init="0">cmd_dump_out</container>
+        <container size="1" static="false" init="0">max_age_lo_out</container>
+        <container size="1" static="false" init="0">max_age_hi_out</container>
+
+        <container size="1" static="false" init="60">max_age_minutes</container>
+        <container size="1" static="false" init="60">max_age_lo</container>
+        <container size="1" static="false" init="0">max_age_hi</container>
+
+        <container size="0">time</container>
+
+        <container size="0">co2</container>
+        <container size="0">temperature</container>
+        <container size="0">humidity</container>
+        <container size="0">pressure</container>
+    </data-containers>
+
+    <input>
+        <bluetooth id="phyphox:mini" name="phyphox:mini" mode="notification" mtu="180" subscribeOnStart="true">
+            <output char="cddf1010-30f7-4671-8b43-5e40ba53514a" offset="0" conversion="int32LittleEndian" repeating="20">time</output>
+            <output char="cddf1010-30f7-4671-8b43-5e40ba53514a" offset="4" conversion="float32LittleEndian" repeating="20">co2</output>
+            <output char="cddf1010-30f7-4671-8b43-5e40ba53514a" offset="8" conversion="float32LittleEndian" repeating="20">temperature</output>
+            <output char="cddf1010-30f7-4671-8b43-5e40ba53514a" offset="12" conversion="float32LittleEndian" repeating="20">humidity</output>
+            <output char="cddf1010-30f7-4671-8b43-5e40ba53514a" offset="16" conversion="float32LittleEndian" repeating="20">pressure</output>
+        </bluetooth>
+    </input>
+    <output>
+        <bluetooth id="phyphox:mini" name="phyphox:mini">
+            <input keep="false" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="0">cmd_dump_out</input>
+            <input keep="false" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="2">max_age_lo_out</input>
+            <input keep="false" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="3">max_age_hi_out</input>
+        </bluetooth>
+    </output>
+
+    <views>
+        <view label="Logged data">
+            <info label="Press a button below to fetch the data phyphox:mini logged in the background. This can take a few seconds for large datasets.">
+            </info>
+            <button label="Request all data">
+                <input type="value">0</input>
+                <output>max_age_lo_out</output>
+                <input type="value">0</input>
+                <output>max_age_hi_out</output>
+                <input type="value">2</input>
+                <output>cmd_dump_out</output>
+            </button>
+            <button label="Request last 24h">
+                <input type="value">160</input>
+                <output>max_age_lo_out</output>
+                <input type="value">5</input>
+                <output>max_age_hi_out</output>
+                <input type="value">2</input>
+                <output>cmd_dump_out</output>
+            </button>
+            <button label="Request last hour">
+                <input type="value">60</input>
+                <output>max_age_lo_out</output>
+                <input type="value">0</input>
+                <output>max_age_hi_out</output>
+                <input type="value">2</input>
+                <output>cmd_dump_out</output>
+            </button>
+            
+            <graph label="CO₂" timeOnX="true" labelX="time" unitX="s" labelY="CO₂" unitY="ppm" partialUpdate="true" hideTimeMarkers="true" systemTime="true">
+                <input axis="x">time</input>
+                <input axis="y">co2</input>
+            </graph>
+            <graph label="Temperature" timeOnX="true" labelX="time" unitX="s" labelY="T" unitY="°C" partialUpdate="true" hideTimeMarkers="true" systemTime="true">
+                <input axis="x">time</input>
+                <input axis="y">temperature</input>
+            </graph>
+            <graph label="Relative humidity" timeOnX="true" labelX="time" unitX="s" labelY="RH" unitY="%" partialUpdate="true" hideTimeMarkers="true" systemTime="true">
+                <input axis="x">time</input>
+                <input axis="y">humidity</input>
+            </graph>
+            <graph label="Pressure" timeOnX="true" labelX="time" unitX="s" labelY="p" unitY="hPa" partialUpdate="true" hideTimeMarkers="true" systemTime="true">
+                <input axis="x">time</input>
+                <input axis="y">pressure</input>
+            </graph>
+        </view>
+    </views>
+
+    <analysis sleep="0" onUserInput="true">
+        <formula formula="[1]%256">
+            <input clear="false">max_age_minutes</input>
+            <output clear="false">max_age_lo</output>
+        </formula>
+        <formula formula="([1]-[2])/256">
+            <input clear="false">max_age_minutes</input>
+            <input clear="false">max_age_lo</input>
+            <output clear="false">max_age_hi</output>
+        </formula>
+    </analysis>
+
+    <export>
+        <set name="Logged data">
+            <data name="Time since experiment start (s)">time</data>
+            <data name="CO₂ (ppm)">co2</data>
+            <data name="Temperature (°C)">temperature</data>
+            <data name="rel. Humidity (%)">humidity</data>
+            <data name="Pressure (hPa)">pressure</data>
+        </set>
+    </export>
+</phyphox>

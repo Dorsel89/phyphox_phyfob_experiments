@@ -1,8 +1,24 @@
 <phyphox version="1.18">
     <title>Temperature, Humidity</title>
-    <category>phyfob - key experiments</category>
+    <category>phyphox:mini</category>
     <color>ADEBB3</color>
     <description>SHTC3</description>
+    <translations>
+        <translation locale="de">
+            <title>Temperatur, Feuchtigkeit</title>
+            <category>phyphox:mini</category>
+            <string original="Rawdata">Rohdaten</string>
+            <string original="Settings">Einstellungen</string>
+            <string original="Share">Teilen</string>
+            <string original="Temperature">Temperatur</string>
+            <string original="Relative humidity">Relative Luftfeuchtigkeit</string>
+            <string original="current measurement interval">aktuelles Messintervall</string>
+            <string original="100ms">100 ms</string>
+            <string original="500ms">500 ms</string>
+            <string original="1s">1 s</string>
+            <string original="2s">2 s</string>
+        </translation>
+    </translations>
 
     <data-containers>
         <container size="0">time_raw</container>
@@ -23,7 +39,7 @@
 
     </data-containers>
     <input>
-        <bluetooth id="phyfob" name="phyfob" mode="notification" subscribeOnStart="true">
+        <bluetooth id="phyphox:mini" name="phyphox:mini" mode="notification" subscribeOnStart="true">
             <config char="cddf1006-30f7-4671-8b43-5e40ba53514a" conversion="hexadecimal">010A</config>
             <output char="cddf1005-30f7-4671-8b43-5e40ba53514a" offset="0" conversion="float32LittleEndian">temperature</output>
             <output char="cddf1005-30f7-4671-8b43-5e40ba53514a" offset="4" conversion="float32LittleEndian">humidity</output>
@@ -31,7 +47,7 @@
         </bluetooth>
     </input>       
     <output>
-        <bluetooth id="phyfob">
+        <bluetooth id="phyphox:mini">
             <input char="cddf1006-30f7-4671-8b43-5e40ba53514a" conversion="byteArray">byteArray</input>
         </bluetooth>
     </output>

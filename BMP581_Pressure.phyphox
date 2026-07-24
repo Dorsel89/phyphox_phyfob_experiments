@@ -1,17 +1,21 @@
 <phyphox version="1.19">
     <title>Pressure, Temperature</title>
-    <category>phyfob - key experiments</category>
+    <category>phyphox:mini</category>
 	<color>ADEBB3</color>
     <description>Using the Bosch BMP581 sensor to measure air pressure and temperature.</description>
 	<translations>
     <translation locale="de">
       <title>Druck, Temperatur</title>
+      <category>phyphox:mini</category>
       <description>Verwendung des Bosch BMP581 Sensors zur Messung von Luftdruck und Temperatur.</description>
+      <string original="Rawdata">Rohdaten</string>
       <string original="Pressure">Druck</string>
 	  <string original="Temperature">Temperatur</string>
 	  <string original="Altitude (calculated)">Höhe (berechnet)</string>
 	  <string original="Altitude">Höhe</string>
-	  <string original="Settings">Einstellungen</string>	  
+	  <string original="Settings">Einstellungen</string>
+	  <string original="iir coefficient">IIR-Koeffizient</string>
+	  <string original="set configuration">Konfiguration übernehmen</string>
 	</translation>
 	</translations>
     <data-containers>
@@ -38,7 +42,7 @@
 		
     </data-containers>
     <input>
-        <bluetooth id="phyfob" name="phyfob" mode="notification" mtu="180" subscribeOnStart="true">
+        <bluetooth id="phyphox:mini" name="phyphox:mini" mode="notification" mtu="180" subscribeOnStart="true">
 			<config char="cddf1008-30f7-4671-8b43-5e40ba53514a" conversion="hexadecimal">010401</config>
 			<output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="0" conversion="float32LittleEndian" repeating="12">pressure_raw</output>
 			<output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="4" conversion="float32LittleEndian" repeating="12">temperature_raw</output>
@@ -46,7 +50,7 @@
         </bluetooth>
     </input>
 	<output>
-	<bluetooth id="phyfob" name="phyfob">
+	<bluetooth id="phyphox:mini" name="phyphox:mini">
 		<input keep="false" char="cddf1008-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="0">cfg_enable_out</input>
 		<input keep="false" char="cddf1008-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="1">cfg_oversampling_out</input>
 		<input keep="false" char="cddf1008-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="2">cfg_iir_out</input>
