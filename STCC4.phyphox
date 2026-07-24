@@ -86,7 +86,7 @@
             <data name="Temperature (°C)">temperature</data>
 			<data name="rel Humidity (%)">humidity</data>
 			<data name="Time CO2 (s)">co2_time</data>
-			<data name="CO2 (ppm)">humidity</data>
+			<data name="CO2 (ppm)">co2</data>
         </set>
     </export>
 </phyphox>
