@@ -87,9 +87,9 @@
                 <input type="empty" />
                 <output>pressure</output>            
                 <input type="value">160</input>
-                <output>max_age_lo_out</output>
+                <output>max_age_lo</output>
                 <input type="value">5</input>
-                <output>max_age_hi_out</output>
+                <output>max_age_hi</output>
                 <input type="value">2</input>
                 <output>cmd_dump</output>
                 <trigger>setConfig</trigger>
@@ -106,9 +106,9 @@
                 <input type="empty" />
                 <output>pressure</output>            
                 <input type="value">60</input>
-                <output>max_age_lo_out</output>
+                <output>max_age_lo</output>
                 <input type="value">0</input>
-                <output>max_age_hi_out</output>
+                <output>max_age_hi</output>
                 <input type="value">2</input>
                 <output>cmd_dump</output>
                 <trigger>setConfig</trigger>
