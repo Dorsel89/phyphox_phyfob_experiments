@@ -1,4 +1,4 @@
-<phyphox version="1.12">
+<phyphox version="1.20">
     <title>Acceleration,rotation rate</title>
     <category>phyphox:mini</category>
 	<color>ADEBB3</color>
@@ -47,15 +47,7 @@
         <bluetooth id="phyphox:mini" name="phyphox:mini" mode="notification"  mtu="247" subscribeOnStart="true">
 			<!--en, rate, range acc, range gyr, format, eventsize, average -->
 			<config char="cddf1002-30f7-4671-8b43-5e40ba53514a" conversion="hexadecimal">03050101000F00</config>
-			<!--<config char="cddf1002-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="0">en</config>
-			
-			<config char="cddf1002-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="1">rate</config>
-			<config char="cddf1002-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="2">range_acc</config>
-			<config char="cddf1002-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="3">range_gyr</config>
-			<config char="cddf1002-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="4">format</config>
-			<config char="cddf1002-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="5">config_n_times</config>
-			<config char="cddf1002-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="6">average</config>
-			-->
+
 			<output char="cddf1001-30f7-4671-8b43-5e40ba53514a" offset="0" repeating="16" conversion="float32LittleEndian">acc_timestamps</output>
 			<output char="cddf1001-30f7-4671-8b43-5e40ba53514a" offset="4" repeating="16" conversion="float32LittleEndian">acc_x</output>
 			<output char="cddf1001-30f7-4671-8b43-5e40ba53514a" offset="8" repeating="16" conversion="float32LittleEndian">acc_y</output>
@@ -67,18 +59,7 @@
         </bluetooth>
     </input>
     <output>
-	<!--
-		<bluetooth id="Keyfob" name="Keyfob">
-			
-			<input keep="false" char="cddf1002-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="0">en</input>
-			<input keep="false" char="cddf1002-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="1">rate</input>
-			<input keep="false" char="cddf1002-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="2">range_acc</input>
-			<input keep="false" char="cddf1002-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="3">range_gyr</input>
-			<input keep="false" char="cddf1002-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="4">format</input>
-			<input keep="false" char="cddf1002-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="5">config_n_times</input>
-			<input keep="false" char="cddf1002-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="6">average</input>		
-        </bluetooth>
-	-->		
+
     </output>	
 	<views>
 		<view label="Gyroscope">  

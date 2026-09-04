@@ -1,4 +1,4 @@
-<phyphox version="1.18">
+<phyphox version="1.20">
     <title>Datalog Readout</title>
     <category>phyphox:mini</category>
     <color>ADEBB3</color>
@@ -21,13 +21,10 @@
     </translations>
 
     <data-containers>
-        <container size="1" static="false" init="0">cmd_dump_out</container>
-        <container size="1" static="false" init="0">max_age_lo_out</container>
-        <container size="1" static="false" init="0">max_age_hi_out</container>
 
-        <container size="1" static="false" init="60">max_age_minutes</container>
-        <container size="1" static="false" init="60">max_age_lo</container>
-        <container size="1" static="false" init="0">max_age_hi</container>
+        <container size="1" static="false" init="60" clearGroup="_">max_age_minutes</container>
+        <container size="1" static="false" init="60" clearGroup="_">max_age_lo</container>
+        <container size="1" static="false" init="0" clearGroup="_">max_age_hi</container>
 
         <container size="0">time</container>
 
@@ -48,9 +45,9 @@
     </input>
     <output>
         <bluetooth id="phyphox:mini" name="phyphox:mini">
-            <input keep="false" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="0">cmd_dump_out</input>
-            <input keep="false" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="2">max_age_lo_out</input>
-            <input keep="false" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="3">max_age_hi_out</input>
+            <input keep="false" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="0" triggerId="setConfig">cmd_dump</input>
+            <input keep="false" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="2" triggerId="setConfig">max_age_lo</input>
+            <input keep="false" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="3" triggerId="setConfig">max_age_hi</input>
         </bluetooth>
     </output>
 
@@ -70,11 +67,12 @@
                 <input type="empty" />
                 <output>pressure</output>            
                 <input type="value">0</input>
-                <output>max_age_lo_out</output>
+                <output>max_age_lo</output>
                 <input type="value">0</input>
-                <output>max_age_hi_out</output>
+                <output>max_age_hi</output>
                 <input type="value">2</input>
-                <output>cmd_dump_out</output>
+                <output>cmd_dump</output>
+                <trigger>setConfig</trigger>
             </button>
             <button label="Request last 24h">
                 <input type="empty" />
@@ -93,6 +91,7 @@
                 <output>max_age_hi_out</output>
                 <input type="value">2</input>
                 <output>cmd_dump_out</output>
+                <trigger>setConfig</trigger>
             </button>
             <button label="Request last hour">
                 <input type="empty" />
@@ -111,6 +110,7 @@
                 <output>max_age_hi_out</output>
                 <input type="value">2</input>
                 <output>cmd_dump_out</output>
+                <trigger>setConfig</trigger>
             </button>
             
             <graph label="CO₂" timeOnX="true" labelX="time" unitX="s" labelY="CO₂" unitY="ppm" partialUpdate="true" hideTimeMarkers="true" systemTime="true">

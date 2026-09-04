@@ -1,4 +1,4 @@
-<phyphox version="1.19">
+<phyphox version="1.20">
     <title>Datalog Config</title>
     <category>phyphox:mini</category>
     <color>ADEBB3</color>
@@ -23,30 +23,27 @@
     </translations>
 
     <data-containers>
-        <container size="1" static="false" init="1">sel_co2</container>
-        <container size="1" static="false" init="1">sel_temperature</container>
-        <container size="1" static="false" init="1">sel_humidity</container>
-        <container size="1" static="false" init="1">sel_pressure</container>
-        <container size="1" static="false" init="15">mask</container>
+        <container size="1" static="false" init="1" clearGroup="_">sel_co2</container>
+        <container size="1" static="false" init="1" clearGroup="_">sel_temperature</container>
+        <container size="1" static="false" init="1" clearGroup="_">sel_humidity</container>
+        <container size="1" static="false" init="1" clearGroup="_">sel_pressure</container>
+        <container size="1" static="false" init="15" clearGroup="_">mask</container>
 
-        <container size="1" static="false" init="60">interval_s</container>
-        <container size="1" static="false" init="60">interval_lo</container>
-        <container size="1" static="false" init="0">interval_hi</container>
+        <container size="1" static="false" init="60" clearGroup="_">interval_s</container>
+        <container size="1" static="false" init="60" clearGroup="_">interval_lo</container>
+        <container size="1" static="false" init="0" clearGroup="_">interval_hi</container>
 
-        <container size="1" static="false" init="0">cmd_out</container>
-        <container size="1" static="false" init="0">mask_out</container>
-        <container size="1" static="false" init="0">interval_lo_out</container>
-        <container size="1" static="false" init="0">interval_hi_out</container>
+        <container size="1" static="false" init="0" clearGroup="_">cmd</container>
     </data-containers>
 
     <input>
     </input>
     <output>
         <bluetooth id="phyphox:mini" name="phyphox:mini">
-            <input keep="false" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="0">cmd_out</input>
-            <input keep="false" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="1">mask_out</input>
-            <input keep="false" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="2">interval_lo_out</input>
-            <input keep="false" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="3">interval_hi_out</input>
+            <input keep="true" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="0" triggerId="setConfig">cmd_out</input>
+            <input keep="true" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="1" triggerId="setConfig">mask</input>
+            <input keep="true" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="2" triggerId="setConfig">interval_lo</input>
+            <input keep="true" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="3" triggerId="setConfig">interval_hi</input>
         </bluetooth>
     </output>
 
@@ -73,25 +70,22 @@
             </edit>
 
             <button label="Start logging">
-                <input>mask</input>
-                <output>mask_out</output>
-                <input>interval_lo</input>
-                <output>interval_lo_out</output>
-                <input>interval_hi</input>
-                <output>interval_hi_out</output>
                 <input type="value">1</input>
-                <output>cmd_out</output>
+                <output>cmd</output>
+				<trigger>setConfig</trigger>
             </button>
 
             <info label="Warning: pressing &quot;Erase log&quot; or starting logging with a different quantity selection than before permanently deletes the previously logged data.">
             </info>
             <button label="Stop logging">
                 <input type="value">0</input>
-                <output>cmd_out</output>
+                <output>cmd</output>
+				<trigger>setConfig</trigger>                
             </button>
             <button label="Erase log">
                 <input type="value">3</input>
-                <output>cmd_out</output>
+                <output>cmd</output>
+				<trigger>setConfig</trigger>                
             </button>
         </view>
     </views>

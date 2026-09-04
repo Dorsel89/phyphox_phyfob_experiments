@@ -1,13 +1,13 @@
-<phyphox version="1.18">
+<phyphox version="1.20">
     <title>Set Device Name</title>
     <category>phyphox:mini</category>
-    <color>F2C572</color>
-    <description>Sets a custom 4-character Bluetooth advertising name ("phyphox:mini XXXX") on the connected phyfob board. The board restarts automatically right after applying the new name.</description>
+    <color>ADEBB3</color>
+    <description>Sets a custom 4-character Bluetooth advertising name ("phyphox:mini XXXX") on the connected phyphox:mini. The board restarts automatically right after applying the new name.</description>
 
     <translations>
         <translation locale="de">
-            <title>phyfob Gerätename festlegen</title>
-            <description>Legt einen benutzerdefinierten, 4-stelligen Bluetooth-Namen ("phyphox:mini XXXX") auf dem verbundenen phyfob-Board fest. Das Board startet nach dem Übernehmen automatisch neu.</description>
+            <title>Gerätename festlegen</title>
+            <description>Legt einen benutzerdefinierten, 4-stelligen Bluetooth-Namen ("phyphox:mini XXXX") auf dem verbundenen phyphox:mini fest. Das Board startet nach dem Übernehmen automatisch neu.</description>
             <string original="Set device name (Letters &amp; Digits)">Gerätename festlegen (Buchstaben &amp; Ziffern)</string>
             <string original="Set device name (Full ASCII)">Gerätename festlegen (voller ASCII-Bereich)</string>
             <string original="Choose 4 characters. The device name will be 'phyphox:mini XXXX'. After applying, the board restarts immediately and disconnects.">Wähle 4 Zeichen. Der Gerätename wird 'phyphox:mini XXXX' lauten. Nach dem Übernehmen startet das Board sofort neu und trennt die Verbindung.</string>
