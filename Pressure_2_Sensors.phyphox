@@ -1,0 +1,416 @@
+<phyphox version="1.20">
+    <title>Pressure (Reference + Mobile Sensor)</title>
+    <category>phyphox:mini</category>
+    <color>ADEBB3</color>
+    <description>Reads the BMP581 air pressure of two phyphox:mini devices at once. Sensor 1 stays at a fixed location and measures how the ambient pressure drifts (weather); sensor 2 is carried around and is corrected by exactly that drift. A button takes the average of the last second of both sensors as the reference point.</description>
+    <translations>
+        <translation locale="de">
+            <title>Luftdruck (Referenz + mobiler Sensor)</title>
+            <category>phyphox:mini</category>
+            <description>Liest den BMP581-Luftdruck von zwei phyphox:mini gleichzeitig aus. Sensor 1 bleibt an einem festen Ort und misst, wie sich der Umgebungsdruck ändert (Wetter); Sensor 2 wird bewegt und um genau diese Änderung korrigiert. Ein Button übernimmt den Mittelwert der letzten 1 s beider Sensoren als Referenzpunkt.</description>
+            <string original="Sensor 1">Sensor 1</string>
+            <string original="Sensor 2">Sensor 2</string>
+            <string original="Raw data">Rohdaten</string>
+            <string original="Corrected data">Korrigierte Daten</string>
+            <string original="Sensor 1 stays at a fixed location and serves as the reference. Sensor 2 is the mobile sensor. When starting the experiment, phyphox asks twice for a device: first for &quot;Sensor 1&quot;, then for &quot;Sensor 2&quot;. Place both sensors next to each other, then press the button below to set the reference point.">Sensor 1 bleibt an einem festen Ort und dient als Referenz. Sensor 2 ist der mobile Sensor. Beim Start des Experiments fragt phyphox zweimal nach einem Gerät: zuerst nach „Sensor 1“, dann nach „Sensor 2“. Lege beide Sensoren nebeneinander und drücke dann den Button, um den Referenzpunkt zu setzen.</string>
+            <string original="Pressure (both sensors, uncorrected)">Luftdruck (beide Sensoren, unkorrigiert)</string>
+            <string original="Sensor 1 (orange)">Sensor 1 (orange)</string>
+            <string original="Sensor 2 (blue)">Sensor 2 (blau)</string>
+            <string original="Set reference (mean of last 1 s)">Referenz setzen (Mittelwert der letzten 1 s)</string>
+            <string original="Sensor 1 – reference (mean of last 1 s)">Sensor 1 – Referenz (Mittelwert der letzten 1 s)</string>
+            <string original="Sensor 2 – reference (mean of last 1 s)">Sensor 2 – Referenz (Mittelwert der letzten 1 s)</string>
+            <string original="Offset at reference time (Sensor 1 − Sensor 2)">Offset zum Referenzzeitpunkt (Sensor 1 − Sensor 2)</string>
+            <string original="The reference sensor measures how the ambient pressure has changed since the button press. This drift is subtracted from sensor 2, so what remains is only the change sensor 2 has really experienced – for example by being carried to a different height. Data appears here only after the button has been pressed.">Der Referenzsensor misst, wie sich der Umgebungsdruck seit dem Button-Druck geändert hat. Diese Drift wird von Sensor 2 abgezogen, übrig bleibt nur die Änderung, die Sensor 2 tatsächlich erfahren hat – zum Beispiel durch Transport in eine andere Höhe. Daten erscheinen hier erst nach dem Button-Druck.</string>
+            <string original="Reference drift (Sensor 1) since reference">Referenzdrift (Sensor 1) seit Referenz</string>
+            <string original="Δp">Δp</string>
+            <string original="Current drift of the reference">Aktuelle Drift der Referenz</string>
+            <string original="Show raw data as well">Rohdaten mit anzeigen</string>
+            <string original="Sensor 2, corrected">Sensor 2, korrigiert</string>
+            <string original="Sensor 2: raw (light) and corrected (dark)">Sensor 2: roh (hell) und korrigiert (dunkel)</string>
+            <string original="Sensor 2 corrected (current)">Sensor 2 korrigiert (aktuell)</string>
+            <string original="Sensor 2 change vs. reference">Sensor 2 Änderung gegenüber Referenz</string>
+            <string original="Settings">Einstellungen</string>
+            <string original="These settings are applied to both sensors at once, so the two always run with an identical configuration. More oversampling means less noise but a lower data rate; the IIR filter smooths in the sensor itself.">Diese Einstellungen werden auf beide Sensoren gleichzeitig angewendet, sodass beide immer identisch konfiguriert sind. Mehr Oversampling bedeutet weniger Rauschen, aber eine geringere Datenrate; der IIR-Filter glättet bereits im Sensor selbst.</string>
+            <string original="iir coefficient">IIR-Koeffizient</string>
+            <string original="off">aus</string>
+            <string original="set configuration on both sensors">Konfiguration auf beide Sensoren übernehmen</string>
+        </translation>
+    </translations>
+
+    <data-containers>
+        <!-- Raw notification data, emptied by the last module using it in every analysis cycle -->
+        <container size="0">p1_raw</container>
+        <container size="0">t1_raw</container>
+        <container size="0">p2_raw</container>
+        <container size="0">t2_raw</container>
+
+        <!-- Full measurement, used for the graphs and the export -->
+        <container size="0">pressure1</container>
+        <container size="0">time1</container>
+        <container size="0">pressure2</container>
+        <container size="0">time2</container>
+
+        <!-- Bounded ring buffers, only these are searched for the 1 s window.
+             1000 values are far more than 1 s of data at any oversampling
+             setting, but keep the per-cycle cost constant. -->
+        <container size="1000">p1_recent</container>
+        <container size="1000">t1_recent</container>
+        <container size="1000">p2_recent</container>
+        <container size="1000">t2_recent</container>
+
+        <!-- Window selection and running 1 s average -->
+        <container size="1">t1_last</container>
+        <container size="1">t1_from</container>
+        <container size="0">p1_win</container>
+        <container size="0">t1_win</container>
+        <container size="1">p1_live</container>
+
+        <container size="1">t2_last</container>
+        <container size="1">t2_from</container>
+        <container size="0">p2_win</container>
+        <container size="0">t2_win</container>
+        <container size="1">p2_live</container>
+
+        <!-- Reference point, frozen on button press -->
+        <container size="1">p1_ref</container>
+        <container size="1">p2_ref</container>
+        <container size="1">p_offset</container>
+
+        <!-- Drift of the reference sensor since the button press -->
+        <container size="1">drift</container>
+        <container size="0">drift_new</container>
+        <container size="0">drift_hist</container>
+        <container size="0">time1_drift</container>
+
+        <!-- Sensor 2, corrected by the reference drift. Both buffers are
+             cleared by the button, so the trace starts at the reference. -->
+        <container size="0">p2_cal_new</container>
+        <container size="0">pressure2_cal</container>
+        <container size="0">time2_cal</container>
+        <container size="1">p2_live_cal</container>
+        <container size="1">p2_change</container>
+
+        <!-- Which of the two sensor 2 graphs is shown. show_raw is written by
+             the toggle, show_cal_only is its inverse. -->
+        <container size="1" static="false" init="1" clearGroup="_">show_raw</container>
+        <container size="1" init="0" clearGroup="_">show_cal_only</container>
+
+        <!-- BMP581 configuration, written to BOTH sensors by the button in the
+             settings view. The init values match the config tags above. -->
+        <container size="1" static="false" init="1" clearGroup="_">cfg_enable</container>
+        <container size="1" static="false" init="5" clearGroup="_">cfg_oversampling</container>
+        <container size="1" static="false" init="0" clearGroup="_">cfg_iir</container>
+    </data-containers>
+
+    <input>
+        <bluetooth id="Sensor 1" name="phyphox:mini" mode="notification" mtu="180" subscribeOnStart="true">
+            <config char="cddf1008-30f7-4671-8b43-5e40ba53514a" conversion="hexadecimal">010500</config>
+            <output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="0" conversion="float32LittleEndian" repeating="12">p1_raw</output>
+            <output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="8" conversion="float32LittleEndian" repeating="12">t1_raw</output>
+        </bluetooth>
+        <bluetooth id="Sensor 2" name="phyphox:mini" mode="notification" mtu="180" subscribeOnStart="true">
+            <config char="cddf1008-30f7-4671-8b43-5e40ba53514a" conversion="hexadecimal">010500</config>
+            <output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="0" conversion="float32LittleEndian" repeating="12">p2_raw</output>
+            <output char="cddf1007-30f7-4671-8b43-5e40ba53514a" offset="8" conversion="float32LittleEndian" repeating="12">t2_raw</output>
+        </bluetooth>
+    </input>
+
+    <output>
+        <!-- The same three configuration bytes go to both devices. One button
+             press fires every input tag carrying the trigger id, so the two
+             sensors are always configured identically. keep="true" is required
+             here: the buffers must survive the first send to reach the second
+             device as well. -->
+        <bluetooth id="Sensor 1" name="phyphox:mini">
+            <input keep="true" char="cddf1008-30f7-4671-8b43-5e40ba53514a" conversion="singleByte" offset="0" triggerId="setConfig">cfg_enable</input>
+            <input keep="true" char="cddf1008-30f7-4671-8b43-5e40ba53514a" conversion="singleByte" offset="1" triggerId="setConfig">cfg_oversampling</input>
+            <input keep="true" char="cddf1008-30f7-4671-8b43-5e40ba53514a" conversion="singleByte" offset="2" triggerId="setConfig">cfg_iir</input>
+        </bluetooth>
+        <bluetooth id="Sensor 2" name="phyphox:mini">
+            <input keep="true" char="cddf1008-30f7-4671-8b43-5e40ba53514a" conversion="singleByte" offset="0" triggerId="setConfig">cfg_enable</input>
+            <input keep="true" char="cddf1008-30f7-4671-8b43-5e40ba53514a" conversion="singleByte" offset="1" triggerId="setConfig">cfg_oversampling</input>
+            <input keep="true" char="cddf1008-30f7-4671-8b43-5e40ba53514a" conversion="singleByte" offset="2" triggerId="setConfig">cfg_iir</input>
+        </bluetooth>
+    </output>
+
+    <views>
+        <view label="Raw data">
+            <info label="Sensor 1 stays at a fixed location and serves as the reference. Sensor 2 is the mobile sensor. When starting the experiment, phyphox asks twice for a device: first for &quot;Sensor 1&quot;, then for &quot;Sensor 2&quot;. Place both sensors next to each other, then press the button below to set the reference point."></info>
+
+            <graph label="Pressure (both sensors, uncorrected)" timeOnX="true" labelX="t" unitX="s" labelY="p" unitY="hPa" partialUpdate="true">
+                <input axis="x" color="orange">time1</input>
+                <input axis="y" color="orange">pressure1</input>
+                <input axis="x" color="blue">time2</input>
+                <input axis="y" color="blue">pressure2</input>
+            </graph>
+
+            <value label="Sensor 1 (orange)" color="orange" size="1" precision="3" scientific="false" unit="hPa" factor="1">
+                <input>pressure1</input>
+            </value>
+            <value label="Sensor 2 (blue)" color="blue" size="1" precision="3" scientific="false" unit="hPa" factor="1">
+                <input>pressure2</input>
+            </value>
+
+            <separator height="1"></separator>
+
+            <button label="Set reference (mean of last 1 s)">
+                <input type="buffer">p1_live</input>
+                <output>p1_ref</output>
+                <input type="buffer">p2_live</input>
+                <output>p2_ref</output>
+                <input type="empty" />
+                <output>drift_hist</output>
+                <input type="empty" />
+                <output>time1_drift</output>
+                <input type="empty" />
+                <output>pressure2_cal</output>
+                <input type="empty" />
+                <output>time2_cal</output>
+            </button>
+
+            <value label="Sensor 1 – reference (mean of last 1 s)" color="orange" size="1.2" precision="3" scientific="false" unit="hPa" factor="1">
+                <input>p1_ref</input>
+            </value>
+            <value label="Sensor 2 – reference (mean of last 1 s)" color="blue" size="1.2" precision="3" scientific="false" unit="hPa" factor="1">
+                <input>p2_ref</input>
+            </value>
+            <value label="Offset at reference time (Sensor 1 − Sensor 2)" size="1" precision="3" scientific="false" unit="hPa" factor="1">
+                <input>p_offset</input>
+            </value>
+        </view>
+
+        <view label="Corrected data">
+            <info label="The reference sensor measures how the ambient pressure has changed since the button press. This drift is subtracted from sensor 2, so what remains is only the change sensor 2 has really experienced – for example by being carried to a different height. Data appears here only after the button has been pressed."></info>
+
+            <graph label="Reference drift (Sensor 1) since reference" timeOnX="true" labelX="t" unitX="s" labelY="Δp" unitY="hPa" partialUpdate="true">
+                <input axis="x" color="orange">time1_drift</input>
+                <input axis="y" color="orange">drift_hist</input>
+            </graph>
+            <value label="Current drift of the reference" color="orange" size="1.2" precision="3" scientific="false" unit="hPa" factor="1">
+                <input>drift</input>
+            </value>
+
+            <separator height="1"></separator>
+
+            <toggle label="Show raw data as well" default="1">
+                <output>show_raw</output>
+            </toggle>
+
+            <!-- Exactly one of the next two graphs is visible: show_cal_only is
+                 the inverse of the toggle, computed in the analysis block. -->
+            <graph label="Sensor 2, corrected" visibility="show_cal_only" timeOnX="true" labelX="t" unitX="s" labelY="p" unitY="hPa" partialUpdate="true">
+                <input axis="x" color="blue">time2_cal</input>
+                <input axis="y" color="blue">pressure2_cal</input>
+            </graph>
+            <graph label="Sensor 2: raw (light) and corrected (dark)" visibility="show_raw" timeOnX="true" labelX="t" unitX="s" labelY="p" unitY="hPa" partialUpdate="true">
+                <input axis="x" color="weakblue">time2</input>
+                <input axis="y" color="weakblue">pressure2</input>
+                <input axis="x" color="blue">time2_cal</input>
+                <input axis="y" color="blue">pressure2_cal</input>
+            </graph>
+
+            <value label="Sensor 2 corrected (current)" color="blue" size="1.2" precision="3" scientific="false" unit="hPa" factor="1">
+                <input>p2_live_cal</input>
+            </value>
+            <value label="Sensor 2 change vs. reference" color="blue" size="1.2" precision="3" scientific="false" unit="hPa" factor="1">
+                <input>p2_change</input>
+            </value>
+        </view>
+
+        <view label="Settings">
+            <info label="These settings are applied to both sensors at once, so the two always run with an identical configuration. More oversampling means less noise but a lower data rate; the IIR filter smooths in the sensor itself."></info>
+
+            <dropdown label="Oversampling" default="5">
+                <output>cfg_oversampling</output>
+                <map value="0">1x</map>
+                <map value="1">2x</map>
+                <map value="2">4x</map>
+                <map value="3">8x</map>
+                <map value="4">16x</map>
+                <map value="5">32x</map>
+                <map value="6">64x</map>
+                <map value="7">128x</map>
+            </dropdown>
+            <dropdown label="iir coefficient" default="0">
+                <output>cfg_iir</output>
+                <map value="0">off</map>
+                <map value="1">1</map>
+                <map value="2">3</map>
+                <map value="3">7</map>
+                <map value="4">15</map>
+                <map value="5">31</map>
+                <map value="6">63</map>
+                <map value="7">127</map>
+            </dropdown>
+            <button label="set configuration on both sensors">
+                <trigger>setConfig</trigger>
+            </button>
+        </view>
+    </views>
+
+    <analysis>
+        <!-- Inverse of the toggle, so the second sensor 2 graph is shown
+             exactly when the first one is hidden. -->
+        <formula formula="1-[1]">
+            <input as="in" clear="false">show_raw</input>
+            <output as="out" clear="true">show_cal_only</output>
+        </formula>
+
+        <!-- ============ Sensor 1 (reference) ============ -->
+        <append>
+            <input as="in" clear="false">p1_raw</input>
+            <output as="out" clear="false">pressure1</output>
+        </append>
+        <append>
+            <input as="in" clear="false">p1_raw</input>
+            <output as="out" clear="false">p1_recent</output>
+        </append>
+        <append>
+            <input as="in" clear="false">t1_raw</input>
+            <output as="out" clear="false">time1</output>
+        </append>
+        <append>
+            <input as="in" clear="false">t1_raw</input>
+            <output as="out" clear="false">t1_recent</output>
+        </append>
+
+        <!-- Running average over the last second. The timestamps increase
+             monotonically, so max is the newest one. -->
+        <max>
+            <input as="y" clear="false">t1_recent</input>
+            <output as="max">t1_last</output>
+        </max>
+        <formula formula="[1]-1">
+            <input as="in" clear="false">t1_last</input>
+            <output as="out" clear="true">t1_from</output>
+        </formula>
+        <rangefilter>
+            <input as="in" clear="false">t1_recent</input>
+            <input as="min" clear="false">t1_from</input>
+            <input as="in" clear="false">p1_recent</input>
+            <output as="out" clear="true">t1_win</output>
+            <output as="out" clear="true">p1_win</output>
+        </rangefilter>
+        <average>
+            <input as="buffer" clear="false">p1_win</input>
+            <output as="average">p1_live</output>
+        </average>
+
+        <!-- Drift of the reference sensor since the button press. The smoothed
+             average is used, so the correction applied to sensor 2 does not
+             carry the noise of a single reference sample. -->
+        <subtract>
+            <input as="minuend" clear="false">p1_live</input>
+            <input as="subtrahend" clear="false">p1_ref</input>
+            <output as="difference">drift</output>
+        </subtract>
+
+        <!-- Drift history, one value per reference sample so it lines up with
+             the sensor 1 timestamps. -->
+        <formula formula="[1_]-[2]">
+            <input as="in" clear="true">p1_raw</input>
+            <input as="in" clear="false">p1_ref</input>
+            <output as="out" clear="true">drift_new</output>
+        </formula>
+        <append>
+            <input as="in" clear="true">drift_new</input>
+            <output as="out" clear="false">drift_hist</output>
+        </append>
+        <append>
+            <input as="in" clear="true">t1_raw</input>
+            <output as="out" clear="false">time1_drift</output>
+        </append>
+
+        <!-- ============ Sensor 2 (mobile) ============ -->
+        <append>
+            <input as="in" clear="false">p2_raw</input>
+            <output as="out" clear="false">pressure2</output>
+        </append>
+        <append>
+            <input as="in" clear="false">p2_raw</input>
+            <output as="out" clear="false">p2_recent</output>
+        </append>
+        <append>
+            <input as="in" clear="false">t2_raw</input>
+            <output as="out" clear="false">time2</output>
+        </append>
+        <append>
+            <input as="in" clear="false">t2_raw</input>
+            <output as="out" clear="false">t2_recent</output>
+        </append>
+
+        <max>
+            <input as="y" clear="false">t2_recent</input>
+            <output as="max">t2_last</output>
+        </max>
+        <formula formula="[1]-1">
+            <input as="in" clear="false">t2_last</input>
+            <output as="out" clear="true">t2_from</output>
+        </formula>
+        <rangefilter>
+            <input as="in" clear="false">t2_recent</input>
+            <input as="min" clear="false">t2_from</input>
+            <input as="in" clear="false">p2_recent</input>
+            <output as="out" clear="true">t2_win</output>
+            <output as="out" clear="true">p2_win</output>
+        </rangefilter>
+        <average>
+            <input as="buffer" clear="false">p2_win</input>
+            <output as="average">p2_live</output>
+        </average>
+
+        <!-- Calibration: remove the ambient pressure change measured by the
+             reference sensor from every new sensor 2 sample. -->
+        <formula formula="[1_]-[2]">
+            <input as="in" clear="true">p2_raw</input>
+            <input as="in" clear="false">drift</input>
+            <output as="out" clear="true">p2_cal_new</output>
+        </formula>
+        <append>
+            <input as="in" clear="true">p2_cal_new</input>
+            <output as="out" clear="false">pressure2_cal</output>
+        </append>
+        <append>
+            <input as="in" clear="true">t2_raw</input>
+            <output as="out" clear="false">time2_cal</output>
+        </append>
+
+        <!-- Corrected current value and the change since the reference -->
+        <subtract>
+            <input as="minuend" clear="false">p2_live</input>
+            <input as="subtrahend" clear="false">drift</input>
+            <output as="difference">p2_live_cal</output>
+        </subtract>
+        <subtract>
+            <input as="minuend" clear="false">p2_live_cal</input>
+            <input as="subtrahend" clear="false">p2_ref</input>
+            <output as="difference">p2_change</output>
+        </subtract>
+
+        <!-- Offset between the two sensors at the reference time -->
+        <subtract>
+            <input as="minuend" clear="false">p1_ref</input>
+            <input as="subtrahend" clear="false">p2_ref</input>
+            <output as="difference">p_offset</output>
+        </subtract>
+    </analysis>
+
+    <export>
+        <set name="Sensor 1">
+            <data name="Time (s)">time1</data>
+            <data name="Pressure (hPa)">pressure1</data>
+        </set>
+        <set name="Sensor 2">
+            <data name="Time (s)">time2</data>
+            <data name="Pressure (hPa)">pressure2</data>
+        </set>
+        <set name="Reference drift">
+            <data name="Time (s)">time1_drift</data>
+            <data name="Drift (hPa)">drift_hist</data>
+        </set>
+        <set name="Sensor 2 corrected">
+            <data name="Time (s)">time2_cal</data>
+            <data name="Pressure corrected (hPa)">pressure2_cal</data>
+        </set>
+    </export>
+</phyphox>
