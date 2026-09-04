@@ -9,6 +9,8 @@
             <category>phyphox:mini</category>
             <string original="Rawdata">Rohdaten</string>
             <string original="CO₂">CO₂</string>
+            <string original="Place the sensor in the fresh air and press start. Calibration is completed once you're reading 0 ppm in the graph.">Stellen Sie den Sensor an die frische Luft und drücken Sie auf „Start“. Die Kalibrierung ist abgeschlossen, sobald im Diagramm ein Wert von 0 ppm angezeigt wird.</string>
+            
         </translation>
     </translations>
 
@@ -30,6 +32,8 @@
     </output>
     <views>
         <view label="Rawdata">
+            <info label="Place the sensor in the fresh air and press start. Calibration is completed once you're reading 0 ppm in the graph.">
+            </info>
             <graph label="CO₂" timeOnX="true" labelX="time" unitX="s" labelY="CO₂" unitY="ppm" partialUpdate="true">
                 <input axis="x">co2_time</input>
                 <input axis="y">co2</input>                

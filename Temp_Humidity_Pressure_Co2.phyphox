@@ -5,14 +5,14 @@
     <description>STCC4, HDC1080, BMP581</description>
     <translations>
         <translation locale="de">
-            <title>CO₂, Temperatur, Feuchtigkeit, Druck</title>
+            <title>CO₂, Temperatur, Feuchtigkeit, Luftdruck</title>
             <category>phyphox:mini</category>
             <string original="Rawdata">Rohdaten</string>
             <string original="CO₂">CO₂</string>
             <string original="Temperature">Temperatur</string>
             <string original="Relative humidity">Relative Luftfeuchtigkeit</string>
-            <string original="RH">rF</string>
-            <string original="Pressure">Druck</string>
+            <string original="RH">RH</string>
+            <string original="Pressure">Luftdruck</string>
             <string original="P">P</string>
         </translation>
     </translations>

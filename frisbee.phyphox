@@ -10,7 +10,7 @@
       <description>Physik der Frisbeescheibe</description>
       <string original="Rawdata">Rohdaten</string>
       <string original="Share">Teilen</string>
-      <string original="Pressure">Druck</string>
+      <string original="Pressure">Luftdruck</string>
       <string original="Pressure diff">Druckdifferenz</string>
     </translation>
 	</translations>

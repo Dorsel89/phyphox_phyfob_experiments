@@ -7,7 +7,7 @@
         <translation locale="de">
             <title>Datalog-Auslesen</title>
             <category>phyphox:mini</category>
-            <description>Liest die im Hintergrund von phyphox:mini aufgezeichneten CO₂-/Temperatur-/Feuchtigkeits-/Druckdaten aus.</description>
+            <description>Liest die im Hintergrund von phyphox:mini aufgezeichneten CO₂-/Temperatur-/Feuchtigkeits-/Luftdruckdaten aus.</description>
             <string original="Logged data">Aufgezeichnete Daten</string>
             <string original="Press a button below to fetch the data phyphox:mini logged in the background. This can take a few seconds for large datasets.">Tippe auf einen Button, um die im Hintergrund von phyphox:mini aufgezeichneten Daten abzurufen. Dies kann bei großen Datensätzen einige Sekunden dauern.</string>
             <string original="Request all data">Alle Daten anfordern</string>
@@ -16,7 +16,7 @@
             <string original="CO₂">CO₂</string>
             <string original="Temperature">Temperatur</string>
             <string original="Relative humidity">Relative Luftfeuchtigkeit</string>
-            <string original="Pressure">Druck</string>
+            <string original="Pressure">Luftdruck</string>
         </translation>
     </translations>
 
@@ -25,6 +25,7 @@
         <container size="1" static="false" init="60" clearGroup="_">max_age_minutes</container>
         <container size="1" static="false" init="60" clearGroup="_">max_age_lo</container>
         <container size="1" static="false" init="0" clearGroup="_">max_age_hi</container>
+        <container size="1" static="false" init="2" clearGroup="_">cmd_dump</container>
 
         <container size="0">time</container>
 
@@ -90,7 +91,7 @@
                 <input type="value">5</input>
                 <output>max_age_hi_out</output>
                 <input type="value">2</input>
-                <output>cmd_dump_out</output>
+                <output>cmd_dump</output>
                 <trigger>setConfig</trigger>
             </button>
             <button label="Request last hour">
@@ -109,7 +110,7 @@
                 <input type="value">0</input>
                 <output>max_age_hi_out</output>
                 <input type="value">2</input>
-                <output>cmd_dump_out</output>
+                <output>cmd_dump</output>
                 <trigger>setConfig</trigger>
             </button>
             

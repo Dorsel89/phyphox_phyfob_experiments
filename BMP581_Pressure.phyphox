@@ -5,11 +5,11 @@
     <description>Using the Bosch BMP581 sensor to measure air pressure and temperature.</description>
 	<translations>
     <translation locale="de">
-      <title>Druck, Temperatur</title>
+      <title>Luftdruck, Temperatur</title>
       <category>phyphox:mini</category>
       <description>Verwendung des Bosch BMP581 Sensors zur Messung von Luftdruck und Temperatur.</description>
       <string original="Rawdata">Rohdaten</string>
-      <string original="Pressure">Druck</string>
+      <string original="Pressure">Luftdruck</string>
 	  <string original="Temperature">Temperatur</string>
 	  <string original="Altitude (calculated)">Höhe (berechnet)</string>
 	  <string original="Altitude">Höhe</string>

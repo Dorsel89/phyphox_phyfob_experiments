@@ -7,12 +7,12 @@
         <translation locale="de">
             <title>Datalog-Konfiguration</title>
             <category>phyphox:mini</category>
-            <description>Konfiguriert die Hintergrundaufzeichnung von phyphox:mini: Wähle aus, welche Größen (CO₂, Temperatur, Feuchtigkeit, Druck) aufgezeichnet werden und in welchem Intervall, und starte/stoppe die Aufzeichnung oder lösche das gespeicherte Protokoll. Die Aufzeichnung läuft im Hintergrund auf dem externen Flash-Speicher von phyphox:mini, solange kein Smartphone verbunden ist. Nutze das Experiment "phyphox:mini Datalog-Auslesen", um die aufgezeichneten Daten anschließend abzurufen.</description>
+            <description>Konfiguriert die Hintergrundaufzeichnung von phyphox:mini: Wähle aus, welche Größen (CO₂, Temperatur, Feuchtigkeit, Luftdruck) aufgezeichnet werden und in welchem Intervall, und starte/stoppe die Aufzeichnung oder lösche das gespeicherte Protokoll. Die Aufzeichnung läuft im Hintergrund auf dem externen Flash-Speicher von phyphox:mini, solange kein Smartphone verbunden ist. Nutze das Experiment "phyphox:mini Datalog-Auslesen", um die aufgezeichneten Daten anschließend abzurufen.</description>
             <string original="Settings">Einstellungen</string>
             <string original="CO₂">CO₂</string>
             <string original="Temperature">Temperatur</string>
             <string original="Humidity">Feuchtigkeit</string>
-            <string original="Pressure">Druck</string>
+            <string original="Pressure">Luftdruck</string>
             <string original="Logging interval">Aufzeichnungsintervall</string>
             <string original="Start logging">Aufzeichnung starten</string>
             <string original="Stop logging">Aufzeichnung stoppen</string>
@@ -40,7 +40,7 @@
     </input>
     <output>
         <bluetooth id="phyphox:mini" name="phyphox:mini">
-            <input keep="true" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="0" triggerId="setConfig">cmd_out</input>
+            <input keep="true" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="0" triggerId="setConfig">cmd</input>
             <input keep="true" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="1" triggerId="setConfig">mask</input>
             <input keep="true" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="2" triggerId="setConfig">interval_lo</input>
             <input keep="true" char="cddf1011-30f7-4671-8b43-5e40ba53514a" length="1" conversion="singleByte" offset="3" triggerId="setConfig">interval_hi</input>
